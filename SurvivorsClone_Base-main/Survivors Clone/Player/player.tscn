@@ -1,0 +1,45 @@
+[gd_scene load_steps=6 format=3 uid="uid://beoxp1wdyq2nx"]
+
+[ext_resource type="Script" path="res://Player/player.gd" id="1_35fnc"]
+[ext_resource type="Texture2D" uid="uid://cmh5mirubh81t" path="res://Textures/Player/player_sprite.png" id="1_yl3xi"]
+[ext_resource type="PackedScene" uid="uid://cdltgyuw4hgoo" path="res://Utility/hurtbox.tscn" id="3_0uf24"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gd6mi"]
+radius = 4.0
+height = 16.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xc2yy"]
+size = Vector2(12, 20)
+
+[node name="Player" type="CharacterBody2D"]
+motion_mode = 1
+script = ExtResource("1_35fnc")
+movement_speed = 200.0
+
+[node name="Sprite2D" type="Sprite2D" parent="." groups=["player"]]
+texture_filter = 1
+texture = ExtResource("1_yl3xi")
+hframes = 2
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(2, 3)
+shape = SubResource("CapsuleShape2D_gd6mi")
+
+[node name="walk timer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 0.2
+one_shot = true
+
+[node name="Hurtbox" parent="." instance=ExtResource("3_0uf24")]
+collision_layer = 2
+collision_mask = 4
+
+[node name="CollisionShape2D" parent="Hurtbox" index="0"]
+position = Vector2(2, 3)
+shape = SubResource("RectangleShape2D_xc2yy")
+
+[connection signal="hurt" from="Hurtbox" to="." method="_on_hurtbox_hurt"]
+
+[editable path="Hurtbox"]
